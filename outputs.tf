@@ -1,7 +1,7 @@
 output "diagnostic_resource_id" {
-  value = azurerm_api_management_diagnostic.diagnostic[0].id
+  value = local.api_management_diagnostic.id
 }
 
 output "diagnostic_identifier" {
-  value = azurerm_api_management_diagnostic.diagnostic[0].identifier
+  value = local.api_management_diagnostic.identifier
 }

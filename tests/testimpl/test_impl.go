@@ -26,11 +26,11 @@ func TestApiManagementModule(t *testing.T, ctx types.TestContext) {
 		t.Fatalf("Unable to get credentials: %e\n", err)
 	}
 
-	t.Run("doesApiManagementBackendExist", func(t *testing.T) {
+	t.Run("doesApiManagementDiagnosticExist", func(t *testing.T) {
 		resourceGroupName := terraform.Output(t, ctx.TerratestTerraformOptions(), "resource_group_name")
 		serviceName := terraform.Output(t, ctx.TerratestTerraformOptions(), "api_management_name")
-		backendUrl := terraform.Output(t, ctx.TerratestTerraformOptions(), "backend_url")
-		backendName := terraform.Output(t, ctx.TerratestTerraformOptions(), "backend_name")
+		diagnosticIdentifier := terraform.Output(t, ctx.TerratestTerraformOptions(), "diagnostic_identifier")
+		diagnosticResourceId := terraform.Output(t, ctx.TerratestTerraformOptions(), "diagnostic_resource_id")
 
 		options := arm.ClientOptions{
 			ClientOptions: azcore.ClientOptions{
@@ -38,16 +38,16 @@ func TestApiManagementModule(t *testing.T, ctx types.TestContext) {
 			},
 		}
 
-		backendClient, err := apiManagement.NewBackendClient(subscriptionId, credential, &options)
+		diagnosticClient, err := apiManagement.NewDiagnosticClient(subscriptionId, credential, &options)
 		if err != nil {
-			t.Fatalf("Error getting API Management backend client: %v", err)
+			t.Fatalf("Error getting API Management diagnostic client: %v", err)
 		}
 
-		backend, err := backendClient.Get(context.Background(), resourceGroupName, serviceName, backendName, nil)
+		diagnostic, err := diagnosticClient.Get(context.Background(), resourceGroupName, serviceName, diagnosticIdentifier, nil)
 		if err != nil {
-			t.Fatalf("Error getting API Management backend: %v", err)
+			t.Fatalf("Error getting API Management diagnostic: %v", err)
 		}
 
-		assert.Equal(t, backendUrl, *backend.Properties.URL)
+		assert.Equal(t, diagnosticResourceId, *diagnostic.ID)
 	})
 }

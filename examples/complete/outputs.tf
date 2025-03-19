@@ -28,3 +28,11 @@ output "api_management_gateway_url" {
 output "resource_group_name" {
   value = module.resource_group.name
 }
+
+output "diagnostic_resource_id" {
+  value = module.apim_diagnostic.diagnostic_resource_id
+}
+
+output "diagnostic_identifier" {
+  value = module.apim_diagnostic.diagnostic_identifier
+}

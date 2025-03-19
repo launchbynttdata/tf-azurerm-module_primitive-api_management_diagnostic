@@ -5,28 +5,16 @@ publisher_email = "launchdso@nttdata.com"
 
 virtual_network_type = "None"
 
-# backend variables
-name        = "terratest-backend"
-protocol    = "http"
-url         = "https://example.com"
-description = "terratest backend"
-resource_id = null
-title       = "terratest backend"
+logger_name = "terratest-logger"
 
-credentials = {
-  authorization = {
-    scheme    = "Basic"
-    parameter = "some+base64+string"
-  }
-  header = {
-    "header1" = "value1,value2"
-  }
-  query = {
-    "param1" = "value1"
-  }
+identifier = "applicationinsights"
+
+backend_request = {
+  bytes_to_log   = 8192
+  headers_to_log = ["X-Terratest-Header"]
 }
 
-tls = {
-  validate_certificate_chain = true
-  validate_certificate_name  = true
+frontend_request = {
+  bytes_to_log   = 0
+  headers_to_log = ["X-Forwarded-For"]
 }

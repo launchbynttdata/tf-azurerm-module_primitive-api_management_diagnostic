@@ -126,6 +126,7 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [azurerm_api_management_api_diagnostic.diagnostic](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/api_management_api_diagnostic) | resource |
 | [azurerm_api_management_diagnostic.diagnostic](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/api_management_diagnostic) | resource |
 | [azurerm_api_management.service](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/api_management) | data source |
 

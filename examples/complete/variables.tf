@@ -68,6 +68,10 @@ variable "resource_names_map" {
       name       = "apim"
       max_length = 50
     }
+    app_insights = {
+      name       = "appinsights"
+      max_length = 50
+    }
   }
 }
 
@@ -113,6 +117,17 @@ variable "virtual_network_type" {
     External and Internal are only supported in the SKUs - Premium and Developer
   EOT
   default     = "None"
+}
+
+# Logger settings
+variable "logger_name" {
+  type        = string
+  description = "name of the logger"
+  default     = null
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-]{1,50}$", var.logger_name))
+    error_message = "The backend name can only contain alphanumeric characters and dashes and must be between 1 and 50 characters long."
+  }
 }
 
 # Diagnostic settings

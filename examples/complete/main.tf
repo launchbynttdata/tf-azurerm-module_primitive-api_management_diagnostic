@@ -57,3 +57,59 @@ module "apim" {
 
   depends_on = [module.resource_group]
 }
+
+module "app_insights" {
+  # source  = "terraform.registry.launch.nttdata.com/module_primitive/application_insights/azurerm"
+  # version = "~> 1.0"
+
+  source = "git::https://github.com/launchbynttdata/tf-azurerm-module_primitive-application_insights.git?ref=fix/tf-version-constraint"
+
+  name                = module.resource_names["app_insights"].minimal_random_suffix
+  resource_group_name = module.resource_group.name
+  location            = var.region
+
+  tags = merge(var.tags, { resource_name = module.resource_names["app_insights"].standard })
+
+  depends_on = [module.resource_group]
+}
+
+module "apim_logger" {
+  # source  = "terraform.registry.launch.nttdata.com/module_primitive/api_management_logger/azurerm"
+  # version = "~> 1.0"
+
+  source = "git::https://github.com/launchbynttdata/tf-azurerm-module_primitive-api_management_logger.git?ref=feature!/initial-implementation"
+
+  api_management_name = module.apim.api_management_name
+  resource_group_name = module.resource_group.name
+
+  name        = var.logger_name
+  resource_id = module.app_insights.id
+
+  application_insights = {
+    instrumentation_key = module.app_insights.instrumentation_key
+  }
+
+  depends_on = [module.apim, module.app_insights]
+}
+
+module "apim_diagnostic" {
+  source = "../.."
+
+  api_management_name = module.apim.api_management_name
+  resource_group_name = module.resource_group.name
+  logger_name         = module.apim_logger.logger_name
+
+  sampling_percentage       = var.sampling_percentage
+  always_log_errors         = var.always_log_errors
+  log_client_ip             = var.log_client_ip
+  verbosity                 = var.verbosity
+  http_correlation_protocol = var.http_correlation_protocol
+  operation_name_format     = var.operation_name_format
+
+  backend_request   = var.backend_request
+  backend_response  = var.backend_response
+  frontend_request  = var.frontend_request
+  frontend_response = var.frontend_response
+
+  identifier = "applicationinsights"
+}
