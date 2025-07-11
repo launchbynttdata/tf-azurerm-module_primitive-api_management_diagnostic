@@ -72,6 +72,10 @@ variable "resource_names_map" {
       name       = "appinsights"
       max_length = 50
     }
+    log_analytics_workspace = {
+      name       = "law"
+      max_length = 50
+    }
   }
 }
 
@@ -256,6 +260,47 @@ variable "frontend_response" {
       try(var.frontend_response.body_bytes >= 0 && var.frontend_response.body_bytes <= 8192, false)
     )
     error_message = "The body_bytes must be a number in the range [0, 8192]."
+  }
+}
+
+# APIM API settings
+variable "api_name" {
+  type        = string
+  description = "name of the API"
+  default     = null
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9- ]{1,50}$", var.api_name))
+    error_message = "The title can only contain alphanumeric characters, dashes, or spaces and must be between 1 and 50 characters long."
+  }
+}
+
+variable "api_revision" {
+  type        = string
+  description = "revision of the API"
+  default     = null
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-]{1,50}$", var.api_revision))
+    error_message = "The APIM name can only contain alphanumeric characters and dashes and must be between 1 and 50 characters long."
+  }
+}
+
+variable "api_display_name" {
+  type        = string
+  description = "display name of the API"
+  default     = null
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9- ]{1,50}$", var.api_display_name))
+    error_message = "The display name can only contain alphanumeric characters, dashes, or spaces and must be between 1 and 50 characters long."
+  }
+}
+
+variable "api_path" {
+  type        = string
+  description = "path of the API"
+  default     = null
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9/-]{1,50}$", var.api_path))
+    error_message = "The path can only contain alphanumeric characters, dashes, or forward slashes and must be between 1 and 50 characters long."
   }
 }
 

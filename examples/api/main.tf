@@ -58,26 +58,54 @@ module "apim" {
   depends_on = [module.resource_group]
 }
 
-module "app_insights" {
-  # source  = "terraform.registry.launch.nttdata.com/module_primitive/application_insights/azurerm"
-  # version = "~> 1.0"
+module "apim_api" {
+  source  = "terraform.registry.launch.nttdata.com/module_primitive/api_management_api/azurerm"
+  version = "~> 1.0"
 
-  source = "git::https://github.com/launchbynttdata/tf-azurerm-module_primitive-application_insights.git?ref=fix/tf-version-constraint"
+  api_management_name = module.apim.api_management_name
+  resource_group_name = module.resource_group.name
+
+  name         = var.api_name
+  display_name = var.api_display_name
+  path         = var.api_path
+  revision     = var.api_revision
+
+  depends_on = [module.apim]
+}
+
+module "log_analytics_workspace" {
+  source  = "terraform.registry.launch.nttdata.com/module_primitive/log_analytics_workspace/azurerm"
+  version = "~> 1.0"
+
+  name                = module.resource_names["log_analytics_workspace"].minimal_random_suffix
+  resource_group_name = module.resource_group.name
+  location            = var.region
+
+  tags = merge(var.tags, { resource_name = module.resource_names["log_analytics_workspace"].standard })
+
+  depends_on = [module.resource_group]
+}
+
+module "app_insights" {
+  source  = "terraform.registry.launch.nttdata.com/module_primitive/application_insights/azurerm"
+  version = "~> 1.0"
 
   name                = module.resource_names["app_insights"].minimal_random_suffix
   resource_group_name = module.resource_group.name
   location            = var.region
 
+  // app insights module is not idempotent unless the workspace_id is set
+  // otherwise Azure will create a new workspace which terraform is not aware of
+  workspace_id = module.log_analytics_workspace.id
+
   tags = merge(var.tags, { resource_name = module.resource_names["app_insights"].standard })
 
-  depends_on = [module.resource_group]
+  depends_on = [module.log_analytics_workspace]
 }
 
 module "apim_logger" {
-  # source  = "terraform.registry.launch.nttdata.com/module_primitive/api_management_logger/azurerm"
-  # version = "~> 1.0"
-
-  source = "git::https://github.com/launchbynttdata/tf-azurerm-module_primitive-api_management_logger.git?ref=feature!/initial-implementation"
+  source  = "terraform.registry.launch.nttdata.com/module_primitive/api_management_logger/azurerm"
+  version = "~> 1.0"
 
   api_management_name = module.apim.api_management_name
   resource_group_name = module.resource_group.name
@@ -95,6 +123,7 @@ module "apim_logger" {
 module "apim_diagnostic" {
   source = "../.."
 
+  api_name            = module.apim_api.api_name
   api_management_name = module.apim.api_management_name
   resource_group_name = module.resource_group.name
   logger_name         = module.apim_logger.logger_name
@@ -112,4 +141,6 @@ module "apim_diagnostic" {
   frontend_response = var.frontend_response
 
   identifier = "applicationinsights"
+
+  depends_on = [module.apim_logger, module.apim_api]
 }
