@@ -43,7 +43,7 @@ variable "identifier" {
   description = "Identifier of the Diagnostics Logs. Must be either 'applicationinsights' or 'azuremonitor'."
   default     = null
   validation {
-    condition     = can(regex("^(applicationinsights|azuremonitor)$", var.identifier))
+    condition     = contains(["applicationinsights", "azuremonitor"], var.identifier)
     error_message = "The diagnostic identifier must be either 'applicationinsights' or 'azuremonitor'."
   }
 }
@@ -52,7 +52,7 @@ variable "identifier" {
 # https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-app-insights?tabs=rest#performance-implications-and-log-sampling
 variable "sampling_percentage" {
   type        = number
-  description = "The percentage of requests to sample. Default is '100.0'."
+  description = "The percentage of requests to sample. Default is '100.0'. Higher percentages may impact performance at high request rates."
   default     = 100.0
   validation {
     condition     = var.sampling_percentage >= 0.0 && var.sampling_percentage <= 100.0
@@ -77,7 +77,7 @@ variable "verbosity" {
   description = "The verbosity level applied to the diagnostic. Must be either 'error', 'information', or 'verbose'. Default is 'error'."
   default     = "error"
   validation {
-    condition     = can(regex("^(error|information|verbose)$", var.verbosity))
+    condition     = contains(["error", "information", "verbose"], var.verbosity)
     error_message = "The verbosity level must be either 'error', 'information', or 'verbose'."
   }
 }
@@ -87,7 +87,7 @@ variable "http_correlation_protocol" {
   description = "The protocol to use for correlation. Must be either 'W3C', 'Legacy', or 'None'. Default is 'W3C'."
   default     = "W3C"
   validation {
-    condition     = can(regex("^(W3C|Legacy|None)$", var.http_correlation_protocol))
+    condition     = contains(["W3C", "Legacy", "None"], var.http_correlation_protocol)
     error_message = "The HTTP correlation protocol must be either 'W3C', 'Legacy', or 'None'."
   }
 }
@@ -97,7 +97,7 @@ variable "operation_name_format" {
   description = "The format of the operation name for Application Insights telemetries. Must be either 'Name' or 'Url'. Default is 'Name'."
   default     = "Name"
   validation {
-    condition     = can(regex("^(Name|Url)$", var.operation_name_format))
+    condition     = contains(["Name", "Url"], var.operation_name_format)
     error_message = "The operation name format must be either 'Name' or 'Url'."
   }
 }
