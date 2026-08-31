@@ -65,7 +65,7 @@ func (cf *clientFactory) getDiagnostic(ctx context.Context, resourceGroupName, s
 	return &response.DiagnosticContract, nil
 }
 
-func TestApiManagementModule(t *testing.T, ctx types.TestContext) {
+func TestComposableApiManagementModule(t *testing.T, ctx types.TestContext) {
 	subscriptionId := os.Getenv("ARM_SUBSCRIPTION_ID")
 	if len(subscriptionId) == 0 {
 		t.Fatal("ARM_SUBSCRIPTION_ID environment variable is not set")
@@ -77,14 +77,14 @@ func TestApiManagementModule(t *testing.T, ctx types.TestContext) {
 	}
 
 	t.Run("doesApiManagementDiagnosticExist", func(t *testing.T) {
-		resourceGroupName := terraform.Output(t, ctx.TerratestTerraformOptions(), "resource_group_name")
-		serviceName := terraform.Output(t, ctx.TerratestTerraformOptions(), "api_management_name")
-		diagnosticIdentifier := terraform.Output(t, ctx.TerratestTerraformOptions(), "diagnostic_identifier")
-		diagnosticResourceId := terraform.Output(t, ctx.TerratestTerraformOptions(), "diagnostic_resource_id")
+		resourceGroupName := terraform.OutputContext(t, context.Background(), ctx.TerratestTerraformOptions(), "resource_group_name")
+		serviceName := terraform.OutputContext(t, context.Background(), ctx.TerratestTerraformOptions(), "api_management_name")
+		diagnosticIdentifier := terraform.OutputContext(t, context.Background(), ctx.TerratestTerraformOptions(), "diagnostic_identifier")
+		diagnosticResourceId := terraform.OutputContext(t, context.Background(), ctx.TerratestTerraformOptions(), "diagnostic_resource_id")
 
 		var apiName = ""
 		if strings.Contains(diagnosticResourceId, fmt.Sprintf("%s/apis", serviceName)) {
-			apiName = terraform.Output(t, ctx.TerratestTerraformOptions(), "api_management_api_name")
+			apiName = terraform.OutputContext(t, context.Background(), ctx.TerratestTerraformOptions(), "api_management_api_name")
 		}
 
 		clientFactory := newClientFactory(t, subscriptionId, credential)

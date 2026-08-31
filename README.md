@@ -104,19 +104,13 @@ If `make check` target is successful, developer is good to commit the code to pr
 - runs `conftests`. `conftests` make sure `policy` checks are successful.
 - runs `terratest`. This is integration test suit.
 - runs `opa` tests
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~>3.117 |
-
-## Providers
-
-| Name | Version |
-|------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.1 |
 
 ## Modules
 
@@ -134,26 +128,26 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | name of the resource group where the APIM exists | `string` | `null` | no |
+| <a name="input_always_log_errors"></a> [always\_log\_errors](#input\_always\_log\_errors) | Indicates whether to always log errors. Default is 'true'. | `bool` | `true` | no |
 | <a name="input_api_management_name"></a> [api\_management\_name](#input\_api\_management\_name) | name of the APIM in which this diagnostic will de deployed | `string` | `null` | no |
 | <a name="input_api_name"></a> [api\_name](#input\_api\_name) | name of the API within the APIM to apply the diagnostic. when omitted, the diagnostic will be created for all APIs | `string` | `null` | no |
-| <a name="input_logger_name"></a> [logger\_name](#input\_logger\_name) | name of the logger within the APIM | `string` | `null` | no |
-| <a name="input_identifier"></a> [identifier](#input\_identifier) | Identifier of the Diagnostics Logs. Must be either 'applicationinsights' or 'azuremonitor'. | `string` | `null` | no |
-| <a name="input_sampling_percentage"></a> [sampling\_percentage](#input\_sampling\_percentage) | The percentage of requests to sample. Default is '100.0'. | `number` | `100` | no |
-| <a name="input_always_log_errors"></a> [always\_log\_errors](#input\_always\_log\_errors) | Indicates whether to always log errors. Default is 'true'. | `bool` | `true` | no |
-| <a name="input_log_client_ip"></a> [log\_client\_ip](#input\_log\_client\_ip) | Indicates whether to log the client IP address. Default is 'false'. | `bool` | `false` | no |
-| <a name="input_verbosity"></a> [verbosity](#input\_verbosity) | The verbosity level applied to the diagnostic. Must be either 'error', 'information', or 'verbose'. Default is 'error'. | `string` | `"error"` | no |
-| <a name="input_http_correlation_protocol"></a> [http\_correlation\_protocol](#input\_http\_correlation\_protocol) | The protocol to use for correlation. Must be either 'W3C', 'Legacy', or 'None'. Default is 'W3C'. | `string` | `"W3C"` | no |
-| <a name="input_operation_name_format"></a> [operation\_name\_format](#input\_operation\_name\_format) | The format of the operation name for Application Insights telemetries. Must be either 'Name' or 'Url'. Default is 'Name'. | `string` | `"Name"` | no |
 | <a name="input_backend_request"></a> [backend\_request](#input\_backend\_request) | Options for logging requests being forwarded to a backend service | <pre>object({<br>    body_bytes     = optional(number, 0)<br>    headers_to_log = optional(list(string), [])<br>  })</pre> | `null` | no |
 | <a name="input_backend_response"></a> [backend\_response](#input\_backend\_response) | Options for logging responses from backend services | <pre>object({<br>    body_bytes     = optional(number, 0)<br>    headers_to_log = optional(list(string), [])<br>  })</pre> | `null` | no |
 | <a name="input_frontend_request"></a> [frontend\_request](#input\_frontend\_request) | Options for logging requests from clients | <pre>object({<br>    body_bytes     = optional(number, 0)<br>    headers_to_log = optional(list(string), [])<br>  })</pre> | `null` | no |
 | <a name="input_frontend_response"></a> [frontend\_response](#input\_frontend\_response) | Options for logging responses sent to clients | <pre>object({<br>    body_bytes     = optional(number, 0)<br>    headers_to_log = optional(list(string), [])<br>  })</pre> | `null` | no |
+| <a name="input_http_correlation_protocol"></a> [http\_correlation\_protocol](#input\_http\_correlation\_protocol) | The protocol to use for correlation. Must be either 'W3C', 'Legacy', or 'None'. Default is 'W3C'. | `string` | `"W3C"` | no |
+| <a name="input_identifier"></a> [identifier](#input\_identifier) | Identifier of the Diagnostics Logs. Must be either 'applicationinsights' or 'azuremonitor'. | `string` | `null` | no |
+| <a name="input_log_client_ip"></a> [log\_client\_ip](#input\_log\_client\_ip) | Indicates whether to log the client IP address. Default is 'false'. | `bool` | `false` | no |
+| <a name="input_logger_name"></a> [logger\_name](#input\_logger\_name) | name of the logger within the APIM | `string` | `null` | no |
+| <a name="input_operation_name_format"></a> [operation\_name\_format](#input\_operation\_name\_format) | The format of the operation name for Application Insights telemetries. Must be either 'Name' or 'Url'. Default is 'Name'. | `string` | `"Name"` | no |
+| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | name of the resource group where the APIM exists | `string` | `null` | no |
+| <a name="input_sampling_percentage"></a> [sampling\_percentage](#input\_sampling\_percentage) | The percentage of requests to sample. Default is '100.0'. Higher percentages may impact performance at high request rates. | `number` | `100` | no |
+| <a name="input_verbosity"></a> [verbosity](#input\_verbosity) | The verbosity level applied to the diagnostic. Must be either 'error', 'information', or 'verbose'. Default is 'error'. | `string` | `"error"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_diagnostic_resource_id"></a> [diagnostic\_resource\_id](#output\_diagnostic\_resource\_id) | n/a |
 | <a name="output_diagnostic_identifier"></a> [diagnostic\_identifier](#output\_diagnostic\_identifier) | n/a |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+| <a name="output_diagnostic_resource_id"></a> [diagnostic\_resource\_id](#output\_diagnostic\_resource\_id) | n/a |
+<!-- END_TF_DOCS -->
