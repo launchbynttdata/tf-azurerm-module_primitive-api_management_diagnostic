@@ -140,7 +140,7 @@ module "apim_diagnostic" {
   frontend_request  = var.frontend_request
   frontend_response = var.frontend_response
 
-  identifier = "applicationinsights"
+  identifier = coalesce(var.identifier, "applicationinsights")
 
   depends_on = [module.apim_logger, module.apim_api]
 }
