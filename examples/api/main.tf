@@ -110,8 +110,7 @@ module "apim_logger" {
   api_management_name = module.apim.api_management_name
   resource_group_name = module.resource_group.name
 
-  name        = var.logger_name
-  resource_id = module.app_insights.id
+  name = var.logger_name
 
   application_insights = {
     instrumentation_key = module.app_insights.instrumentation_key

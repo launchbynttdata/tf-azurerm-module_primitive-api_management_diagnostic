@@ -97,3 +97,7 @@ func TestComposableApiManagementModule(t *testing.T, ctx types.TestContext) {
 		assert.Equal(t, diagnosticResourceId, *diagnostic.ID)
 	})
 }
+
+func TestComposableReadonlyApiManagementModule(t *testing.T, ctx types.TestContext) {
+	TestComposableApiManagementModule(t, ctx)
+}
